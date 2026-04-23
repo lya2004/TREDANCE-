@@ -1,0 +1,325 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base Reset ── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: #0f0f13;
+  color: #e8e8ed;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────
+   Animated ambient canvas background
+───────────────────────────────────────── */
+.canvas-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 900px 600px at 20% 30%, rgba(0, 122, 255, 0.055) 0%, transparent 70%),
+    radial-gradient(ellipse 700px 500px at 80% 70%, rgba(88, 86, 214, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 400px at 60% 10%, rgba(52, 199, 89, 0.04) 0%, transparent 70%),
+    #0f0f13;
+  animation: ambientShift 18s ease-in-out infinite alternate;
+}
+
+@keyframes ambientShift {
+  0%   { background-position: 0% 0%, 100% 100%, 50% 0%; }
+  50%  { background-position: 10% 20%, 90% 80%, 60% 20%; }
+  100% { background-position: 5% 15%, 95% 85%, 55% 5%; }
+}
+
+/* ── Glass Utilities (dark-mode) ── */
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .glass-strong {
+    background: rgba(20, 20, 28, 0.82);
+    backdrop-filter: blur(32px) saturate(200%);
+    -webkit-backdrop-filter: blur(32px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+}
+
+/* ── React Flow Canvas ── */
+.react-flow__node {
+  cursor: grab;
+}
+
+.react-flow__node:active {
+  cursor: grabbing;
+}
+
+/* Edge styles */
+.react-flow__edge-path {
+  stroke: rgba(174, 174, 178, 0.35);
+  stroke-width: 2;
+  transition: stroke 0.2s ease;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: rgba(174, 174, 178, 0.7);
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #007AFF;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px rgba(0, 122, 255, 0.5));
+}
+
+/* Handles */
+.react-flow__handle {
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 0 0 rgba(0, 122, 255, 0);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.react-flow__handle:hover {
+  width: 14px;
+  height: 14px;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 12px rgba(0, 122, 255, 0.6), 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+.react-flow__handle-top { background: rgba(174, 174, 178, 0.5); }
+.react-flow__handle-bottom { background: rgba(174, 174, 178, 0.5); }
+
+/* Canvas background */
+.react-flow__background {
+  background: transparent !important;
+}
+
+.react-flow__background pattern circle {
+  fill: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Minimap */
+.react-flow__minimap {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 15, 19, 0.9) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(0, 122, 255, 0.08) !important;
+}
+
+.react-flow__controls { display: none; }
+.react-flow__attribution { display: none; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(0, 122, 255, 0.3);
+  color: #fff;
+}
+
+/* ─────────────────────────────────────────
+   Workflow Node Cards
+───────────────────────────────────────── */
+.workflow-node {
+  transition: box-shadow 0.25s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+  animation: nodeCardEnter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.workflow-node:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+@keyframes nodeCardEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Node body glass */
+.node-body {
+  background: rgba(18, 18, 24, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+/* Selected node glow — applied per type in component */
+.node-selected-blue  { box-shadow: 0 0 0 2px #007AFF, 0 0 20px rgba(0, 122, 255, 0.35), 0 8px 32px rgba(0,0,0,0.5); }
+.node-selected-green { box-shadow: 0 0 0 2px #34C759, 0 0 20px rgba(52, 199, 89, 0.35), 0 8px 32px rgba(0,0,0,0.5); }
+.node-selected-amber { box-shadow: 0 0 0 2px #FF9F0A, 0 0 20px rgba(255, 159, 10, 0.35), 0 8px 32px rgba(0,0,0,0.5); }
+.node-selected-purple{ box-shadow: 0 0 0 2px #AF52DE, 0 0 20px rgba(175, 82, 222, 0.35), 0 8px 32px rgba(0,0,0,0.5); }
+.node-selected-red   { box-shadow: 0 0 0 2px #FF3B30, 0 0 20px rgba(255, 59, 48, 0.35), 0 8px 32px rgba(0,0,0,0.5); }
+
+.node-default {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+/* ─────────────────────────────────────────
+   Palette drag item
+───────────────────────────────────────── */
+.palette-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.palette-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.palette-item:hover::before {
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────
+   Timeline Animations
+───────────────────────────────────────── */
+.timeline-step {
+  opacity: 0;
+  animation: timelineEnter 0.45s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+@keyframes timelineEnter {
+  from {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Slide-over / Sandbox animations
+───────────────────────────────────────── */
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─────────────────────────────────────────
+   Glowing accent line under TopBar logo
+───────────────────────────────────────── */
+.topbar-glow-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 122, 255, 0.5) 30%,
+    rgba(88, 86, 214, 0.4) 60%,
+    transparent 100%
+  );
+}
+
+/* ─────────────────────────────────────────
+   Input / form overrides for dark mode
+───────────────────────────────────────── */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+  color-scheme: dark;
+}
+
+/* ─────────────────────────────────────────
+   Subtle noise texture overlay
+───────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.4;
+}
